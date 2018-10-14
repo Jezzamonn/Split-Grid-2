@@ -13,7 +13,7 @@ description=$2
 if [ -n "$GITHUB_ACCESS_TOKEN" ]; then
     echo 'Creating GitHub repo...'
     curl -H "Authorization: token $GITHUB_ACCESS_TOKEN" https://api.github.com/user/repos -d "{\"name\":\"$name\",\"description\":\"$description\"}"
-    git remote add origin git@github.com:Jezzamonn/$name.git
+    git remote add origin "git@github.com:Jezzamonn/$name.git"
 else
     echo 'No GitHub personal access token exists, skipping creating a GitHub repo.'
 fi
