@@ -27,8 +27,8 @@ export default class Controller {
 	}
 
 	renderSquares(context, angle) {
-		const edge = Math.max(this.width, this.height)
-		const size = 50;
+		const edge = this.width + this.height;
+		const size = 60;
 		let startIX = 0;
 		let startIY = 0.5;
 	
@@ -59,9 +59,9 @@ export default class Controller {
 				}
 
 				let splitAmt = (xAmt2 > 0) ? xAmt2 : -xAmt2;
-				splitAmt -= 0.25;
+				splitAmt -= 0.15;
 				if (splitAmt < 0) splitAmt = 0;
-				splitAmt = Math.pow(splitAmt, 2) * 2;
+				splitAmt = Math.pow(splitAmt, 2) * 10;
 
 				let rotAmt = splitAmt * yAmt2;
 				if (xAmt2 < 0) {
