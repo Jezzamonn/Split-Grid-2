@@ -4,7 +4,7 @@ export default class Controller {
 		this.width = 500;
 		this.height = 500;
 
-		this.period = 5;
+		this.period = 20;
 		this.animAmt = 0;
 	}
 
@@ -18,68 +18,76 @@ export default class Controller {
 	 * @param {CanvasRenderingContext2D} context 
 	 */
 	render(context) {
-		this.renderBg(context);
-		this.renderSquares(context);
+		const angle = 2 * Math.PI * this.animAmt;
+
+		context.rotate(angle);
+
+		this.renderBg(context, 2 * angle);
+		this.renderSquares(context, 2 * angle);
 	}
 
-	renderSquares(context) {
-		const size = 70;
+	renderSquares(context, angle) {
+		const edge = Math.max(this.width, this.height)
+		const size = 50;
 		let startIX = 0;
 		let startIY = 0.5;
 	
-		while (size * startIX > -this.width / 2) {
+		while (size * startIX > -edge / 2) {
 			startIX --;
 		}
-		while (0.5 * size * startIY > -this.height / 2) {
+		while (0.5 * size * startIY > -edge / 2) {
 			startIY --;
 		}
 	
-		for (let iy = startIY; 0.5 * size * (iy - 1) < this.height / 2; iy ++) {
-			let yAmt = 2 * 0.5 * size * iy / this.height;
+		for (let iy = startIY; 0.5 * size * (iy - 1) < edge / 2; iy ++) {
+			let yAmt = 2 * 0.5 * size * iy / edge;
 			const type = posMod(iy, 2) < 1
 			const color = type ? 'black' : 'white';
 			const rowOffset = type ? 0 : 0.5;
 	
-			for (let ix = startIX + rowOffset - 1; size * (ix - 1) < this.width / 2; ix ++) {
-				let xAmt = 2 * size * ix / this.width;
-				// if (xAmt > 0.15 && color == 'black') {
-				// 	continue;
-				// }
-				// if (xAmt < -0.15 && color == 'white') {
-				// 	continue;
-				// }
+			for (let ix = startIX + rowOffset - 1; size * (ix - 1) < edge / 2; ix ++) {
+				let xAmt = 2 * size * ix / edge;
 
-				const angle = 2 * Math.PI * this.animAmt;
 				// rotate x and y amts;
 				const xAmt2 = Math.cos(angle) * xAmt - Math.sin(angle) * yAmt;
 				const yAmt2 = Math.sin(angle) * xAmt + Math.cos(angle) * yAmt;
-	
+				if (xAmt2 > 0.15 && color == 'black') {
+					continue;
+				}
+				if (xAmt2 < -0.15 && color == 'white') {
+					continue;
+				}
+
 				let splitAmt = (xAmt2 > 0) ? xAmt2 : -xAmt2;
-				splitAmt -= 0.3;
+				splitAmt -= 0.25;
 				if (splitAmt < 0) splitAmt = 0;
-				splitAmt *= splitAmt;
+				splitAmt = Math.pow(splitAmt, 2) * 2;
 
 				let rotAmt = splitAmt * yAmt2;
 				if (xAmt2 < 0) {
 					rotAmt = -rotAmt;
 				}
 
-				let xPos = size * ix;
-				let yPos = 0.5 * size * iy * (2 * splitAmt + 1);
+				let xPos = size * ix * (1 + splitAmt);
+				let yPos = 0.5 * size * iy * (1 + splitAmt);
 				drawSquare(context, xPos, yPos, 4 * Math.PI * rotAmt, color, size / 2);
 			}
 		}
 	}
 	
-	renderBg(context) {
-		context.fillStyle = 'red';
+	renderBg(context, angle) {
+		context.rotate(-angle);
+
+		context.fillStyle = 'black';
 		context.beginPath();
-		context.moveTo(-this.width, -this.height);
+		context.moveTo(0, -this.height);
 		context.lineTo(this.width, -this.height);
 		context.lineTo(this.width, this.height);
-		context.lineTo(-this.width,  this.height);
+		context.lineTo(0,  this.height);
 		context.closePath();
 		context.fill();
+
+		context.rotate(angle);
 	}
 }
 
