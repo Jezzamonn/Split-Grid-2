@@ -51,10 +51,10 @@ export default class Controller {
 				// rotate x and y amts;
 				const xAmt2 = Math.cos(angle) * xAmt - Math.sin(angle) * yAmt;
 				const yAmt2 = Math.sin(angle) * xAmt + Math.cos(angle) * yAmt;
-				if (xAmt2 > 0.15 && color == 'black') {
+				if (xAmt2 > 0.1 && color == 'black') {
 					continue;
 				}
-				if (xAmt2 < -0.15 && color == 'white') {
+				if (xAmt2 < -0.1 && color == 'white') {
 					continue;
 				}
 
